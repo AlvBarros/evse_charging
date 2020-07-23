@@ -1,5 +1,6 @@
 # Import modules
 import requests
+import json
 
 # Set data for request
 endpoint='https://hgy780tcj2.execute-api.eu-central-1.amazonaws.com/dev/data'
@@ -18,7 +19,7 @@ def importSupplierPricesData():
         raise Exception(status+'\n'+respns)
     else:
         print('Retrieved data successfully')
-        return response.text
+        return json.loads(response.text)
 
 # PS: I didn't find it important to create auth and URL files
 # only for a single HTTP request, but I recognize that
