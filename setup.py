@@ -1,8 +1,10 @@
 import setuptools
 
+# Gets readme as a string
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
+# Initialized setup for pip package creation
 setuptools.setup(
     name='evse_charging',
     version='0.1',
