@@ -1,4 +1,3 @@
-# Import modules
 import requests
 import json
 

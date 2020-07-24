@@ -9,5 +9,20 @@
 # JSON with a list of the calulated prices with the specified model 
 # object.
 
+import helper
+
 def run():
-    print('Hello world, from task1!')
+    print('Running Task 3 test')
+    try:
+        data = helper.evse_charging.importSupplierPricesData()
+        clean_data = helper.evse_charging.cleanSupplierPricesData(data)
+        calculated_result = helper.evse_charging.calculatePrices(clean_data)
+        print('Validating result')
+        # print(calculated_result)
+        print('Does calculated_result has the same length as transactions?: ' + str(len(clean_data['transactions']) == len(calculated_result)))
+        print('Test completed.')
+    except:
+        print('Test failed.')
+        raise
+
+run()

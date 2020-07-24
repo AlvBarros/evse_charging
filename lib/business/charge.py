@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Charge:
     def __init__(self, json):
         self.sessionId=json['session id']
@@ -13,3 +15,12 @@ class Charge:
         self.meterValueStart=json['meter value start']
         self.meterValueEnd=json['meter value end']
         self.countryCode=json['countrycode']
+    
+    def durationInMinutes(self):
+        start = self.chargingStart.replace('t', ' ')
+        end = self.chargingEnd.replace('t', ' ')
+        
+        date_start = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+        date_end = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+
+        return(date_end - date_start).seconds/60

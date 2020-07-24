@@ -21,7 +21,7 @@ def run():
     print('Running Task 2 test')
     try:
         datas = []
-        num_datas = 5
+        num_datas = 1
         for n in range(0, num_datas):
             datas.append(helper.evse_charging.importSupplierPricesData())
         
@@ -34,13 +34,18 @@ def run():
         print('Imports made: ' + str(num_datas))
 
         any_with_unspecified=False
+        any_without_evseId=False
         for result in results:
             sps = result['supplier_prices']
             for sp in sps:
                 if (sp.fee is None and sp.time is None and sp.kwh is None):
                     any_with_unspecified=True                                       # not really perfomatic but tests aren't supposed to be ran a lot
-                    break
+                try:
+                    x=sp.evseId # EAFP approach as to check if the object has te attribute
+                except:
+                    any_without_evseId=True
         print('Any result with a Unspecified Price: ' + str(any_with_unspecified))
+        print('Any result without a EVSE ID: ' + str(any_without_evseId))
 
         any_invalid_transaction=False
         for result in results:
