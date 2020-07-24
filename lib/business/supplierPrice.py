@@ -1,3 +1,6 @@
+supplier_price_types = ['unspecified', 'fee', 'time', 'kwh']
+complexity_types = ['simple', 'complex']
+
 def isFloat(v):
     s=str(v)
     try:
@@ -53,7 +56,10 @@ def checkIfKwh(json):
 
 class SupplierPrice:
     def __init__(self, json):
+
+        # This is kind of a factory approach to solving inheritance
         self.type='unspecified'
+
         if (checkIfFee(json)):
             FeePrice.__init__(self, json)
         elif (checkIfTime(json)):
@@ -64,20 +70,46 @@ class SupplierPrice:
             print(json)
         # Should return as type 'unspecified' if nothing else
 
-# Children classes
-
-class kWhPrice(SupplierPrice):
+class FeePrice(SupplierPrice):
     def __init__(self, json):
         self.type='fee'
-        # if ('has kwh price' not in json or not json['has kwh price']):
-        #     raise 'Not possible to create kWhPrice object'
+        self.complexity = 'simple' # should not have any complexity
 
 class TimePrice(SupplierPrice):
     def __init__(self, json):
         self.type='time'
-        pass
+        if (
+            'simple minute price' in json
+            and 'has complex minute price' in json
+            and (json['has complex minute price'] == False or json['has complex minute price'] == 'false')
+            and 'min_duration' in json
+        ):
+            self.complexity='simple'
+        elif (
+            'has complex minute price' in json
+            and (json['has complex minute price'] == True or json['has complex minute price'] == 'true')
+            and 'has hour day' in json
+            and 'interval' in json
+            and 'min duration' in json
+        ):
+            self.complexity='complex'
+        else: # should not be possible
+            raise 'TimePrice must be either simple or complex. JSON: ' + str(json)
 
-class FeePrice(SupplierPrice):
+class kWhPrice(SupplierPrice):
     def __init__(self, json):
         self.type='kwh'
-        pass
+        if (
+            'has kwh price' in json
+            and 'kwh price' in json
+            and 'min cosumed energy' in json # shouldnt it be "coNsumed"?
+        ):
+            self.complexity='simple'
+        elif (
+            'has time based kwh' in json
+            and 'has hour day' in json
+            and 'min consumption' in json
+        ):
+            self.complexity='complex'
+        else: # should not be possible
+            raise 'kWhPrice must be either simple or complex. JSON: ' + str(json)
