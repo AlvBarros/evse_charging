@@ -1,3 +1,4 @@
+# Class that holds the calculated prices for charges
 class Price:
     def __init__(self, supplierPriceId, sessionId):
         self.supplierPriceId=supplierPriceId
@@ -30,8 +31,11 @@ class Price:
     def set_kwhPrice(self, price):
         self.kWhPrice=price
     
+    # Returns total price based on Fee minimum and maximum price logic
     def get_totalPrice(self):
+        # Any category that is not present returns 0
         total = self.get_feePrice() + self.get_timePrice() + self.get_kwhPrice()
+        # If is of Fee category
         if (self.feePrice is not None):
             # Maximum session fee (session value) indicates the maximum value allowed to 
             # charge the customer for a charge.

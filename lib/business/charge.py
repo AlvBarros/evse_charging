@@ -1,5 +1,7 @@
 from datetime import datetime
 
+# Cleans the transaction object from JSON
+# This object always returns with the same 13 fields filled
 class Charge:
     def __init__(self, json):
         self.sessionId=json['session id']
@@ -16,6 +18,7 @@ class Charge:
         self.meterValueEnd=json['meter value end']
         self.countryCode=json['countrycode']
     
+    # Get the time span from charging start to end in minutes
     def durationInMinutes(self):
         start = self.chargingStart.replace('t', ' ')
         end = self.chargingEnd.replace('t', ' ')

@@ -2,18 +2,19 @@ from lib.business.prices.feePrice import FeePrice
 from lib.business.prices.timePrice import TimePrice
 from lib.business.prices.kWhPrice import kWhPrice
 
+# Method for checking if specific supplier_price is of Fee category
 def checkIfFee(json):
     try:
         return (
             'has minimum billing threshold' in json
-            and 'session fee' in json 
-            # and isFloat(json['session fee']) 
+            and 'session fee' in json  # and isFloat(json['session fee']) 
             and 'max_session fee' in json 
             and isFloat(json['max_session fee'])
         )
     except:
         return False
 
+# Method for checking if specific supplier_price is of Time category
 def checkIfTime(json):
     try:
         return (
@@ -31,6 +32,7 @@ def checkIfTime(json):
     except:
         return False
 
+# Method for checking if specific supplier_price is of kWh category
 def checkIfKwh(json):
     try:
         return ((
@@ -45,27 +47,30 @@ def checkIfKwh(json):
     except:
         return False
 
-# Parent class
-
+# Supplier Price class
 class SupplierPrice:
     def __init__(self, json):
         self.evseId = json['evse id']
         self.identifier = json['identifier']
 
+        # If it is of Fee category, add as an object
         if (checkIfFee(json)):
             self.fee = FeePrice(json)
         else:
             self.fee = None
 
+        # If it is of Time category, add as an object
         if (checkIfTime(json)):
             self.time = TimePrice(json)
         else:
             self.time = None
 
+        # If it is of kWh category, add as an object
         if (checkIfKwh(json)):
             self.kwh = kWhPrice(json)
         else:
             self.kwh = None
 
+        # A supplier price must have a category. If not, something's wrong with the check methods
         if (self.fee is None and self.time is None and self.kwh is None):
-            print(json)
+            raise 'Supplier price must be of a category'

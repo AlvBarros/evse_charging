@@ -7,7 +7,7 @@
 # The JSON received from the server with the list of the
 # supplier_prcies and charges (transactions)
 
-import helper
+import tests.helper as helper
 import json
 
 def run():

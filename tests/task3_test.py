@@ -9,7 +9,7 @@
 # JSON with a list of the calulated prices with the specified model 
 # object.
 
-import helper
+import tests.helper as helper
 
 def run():
     print('Running Task 3 test')
