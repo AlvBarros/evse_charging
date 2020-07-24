@@ -1,18 +1,19 @@
 import import_data as importer
+
 from business.supplierPrice import SupplierPrice
+from business.charge import Charge
 
 def cleanSupplierPricesData(data):
     print('Initializing data cleaning')
     supplier_prices = data['supplier_prices']
     clean_supplier_prices = []
-    total=len(supplier_prices)         # Total number o supplier prices
-    print('Suppliers count: ' + str(total))
-    n_unsp=0        # Number of unspecified
-    n_fee=0         # Number of Fee
-    n_time_c=0      # Number of Complex Time Price supplier
-    n_time_s=0      # Number of Simple Time Price supplier
-    n_kwh_c=0       # Number of Complex kWh Price supplier
-    n_kwh_s=0    
+    total=len(supplier_prices)          # Total number o supplier prices
+    n_unsp=0                            # Number of unspecified
+    n_fee=0                             # Number of Fee
+    n_time_c=0                          # Number of Complex Time Price
+    n_time_s=0                          # Number of Simple Time Price
+    n_kwh_c=0                           # Number of Complex kWh Price
+    n_kwh_s=0                           # Number of Simple kWh Price
        # Number of Simple kWh Price supplier
     for sp in supplier_prices:
         # Observation: A Supplier Price can charge in all three categories, 
@@ -41,18 +42,26 @@ def cleanSupplierPricesData(data):
         if (s.fee is not None or s.time is not None or s.kwh is not None):
             clean_supplier_prices.append(s)
 
-    print('Results:')
+    print('===================== Supplier Prices ('+str(total)+') =====================')
     print('    Unspecified: ' + str(n_unsp) + '(' + str(round(n_unsp/total*100, 1)) + '%)')
     print('    Fee: ' + str(n_fee) + '(' + str(round(n_fee/total*100, 1)) + '%)')
     print('    Time: ' + str(n_time_s+n_time_c) + '(' + str(round((n_time_s + n_time_c)/total*100, 1)) + '%)')
     print('        Simple: ' + str(n_time_s) + '(' + str(round(n_time_s/(n_time_s+n_time_c)*100, 1)) + '%)    Complex: ' + str(n_time_c) + '(' + str(round(n_time_c/(n_time_s+n_time_c)*100, 1)) + '%)')
     print('    kWh: ' + str(n_kwh_s+n_kwh_c) + '(' + str(round(n_kwh_s+n_kwh_c/total*100, 1)) + '%)')
     print('        Simple: ' + str(n_kwh_s) + '(' + str(round(n_kwh_s/(n_kwh_s+n_kwh_c)*100, 1)) + '%)    Complex: ' + str(n_kwh_c) + '(' + str(round(n_kwh_c/(n_kwh_s+n_kwh_c)*100, 1)) + '%)')
-    # transactions = data['transactions']
-    # clean_transactions = []
-    # print('Transactions count: ' + str(len(transactions)))
-    # for (tr in transactions):
-    #     pass
+    print('=================================================================')
+
+    transactions = data['transactions']
+    clean_transactions = []
+    print()
+    print('Transactions count: ' + str(len(transactions)))
+    for tr in transactions:
+        t=Charge(tr)
+        clean_transactions.append(t)
+    
+    clean_result = [clean_supplier_prices, clean_transactions]
+    return clean_result
+
 
 
 cleanSupplierPricesData(importer.importSupplierPricesData())
