@@ -19,7 +19,7 @@ def importSupplierPricesData():
         raise Exception(status+'\n'+respns)
     else:
         print('Retrieved data successfully')
-        return json.loads(response.text)
+        return json.loads(response.text.lower())
 
 # PS: I didn't find it important to create auth and URL files
 # only for a single HTTP request, but I recognize that
