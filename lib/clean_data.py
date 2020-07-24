@@ -1,7 +1,5 @@
-import import_data as importer
-
-from business.supplierPrice import SupplierPrice
-from business.charge import Charge
+from lib.business.supplierPrice import SupplierPrice
+from lib.business.charge import Charge
 
 def cleanSupplierPricesData(data):
     print('Initializing data cleaning')
@@ -59,9 +57,5 @@ def cleanSupplierPricesData(data):
         t=Charge(tr)
         clean_transactions.append(t)
     
-    clean_result = [clean_supplier_prices, clean_transactions]
+    clean_result = { 'supplier_prices': clean_supplier_prices, 'transactions': clean_transactions }
     return clean_result
-
-
-
-cleanSupplierPricesData(importer.importSupplierPricesData())
