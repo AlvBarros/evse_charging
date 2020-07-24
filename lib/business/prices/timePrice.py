@@ -24,7 +24,6 @@ class TimePrice():
             raise 'TimePrice must be either simple or complex. JSON: ' + str(json)
         
         if ('simple minute price' in json and convert.isFloat(json['simple minute price'])):
-            print('simple minute price: ' + json['simple minute price'])
             self.simpleMinutePrice = convert.convertToFloat(json['simple minute price'])
         else:
             self.simpleMinutePrice = None
