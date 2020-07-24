@@ -12,31 +12,33 @@ def cleanSupplierPricesData(data):
     n_time_c=0      # Number of Complex Time Price supplier
     n_time_s=0      # Number of Simple Time Price supplier
     n_kwh_c=0       # Number of Complex kWh Price supplier
-    n_kwh_s=0       # Number of Simple kWh Price supplier
+    n_kwh_s=0    
+       # Number of Simple kWh Price supplier
     for sp in supplier_prices:
         # Observation: A Supplier Price can charge in all three categories, 
         # Fee, Time and kWh. So, you could receive Supplier Prices with all 
         # attributes, but you CAN’T have a simple and complex field from the same category.
         s=SupplierPrice(sp)
-        if (s.type == 'unspecified'):
+        if (s.fee is None and s.time is None and s.kwh is None):
             n_unsp = n_unsp + 1
 
-        elif (s.type == 'fee'):
-            n_fee = n_fee + 1
+        else:
+            if (s.fee is not None):
+                n_fee = n_fee + 1
 
-        elif (s.type == 'time'):
-            if (s.complexity == 'complex'):
-                n_time_c = n_time_c + 1
-            elif (s.complexity == 'simple'):
-                n_time_s = n_time_s + 1
+            if (s.time is not None):
+                if (s.time.complexity == 'complex'):
+                    n_time_c = n_time_c + 1
+                elif (s.time.complexity == 'simple'):
+                    n_time_s = n_time_s + 1
 
-        elif (s.type == 'kwh'):
-            if (s.complexity == 'complex'):
-                n_kwh_c = n_kwh_c + 1
-            elif (s.complexity == 'simple'):
-                n_kwh_s = n_kwh_s + 1
+            if (s.kwh is not None):
+                if (s.kwh.complexity == 'complex'):
+                    n_kwh_c = n_kwh_c + 1
+                elif (s.kwh.complexity == 'simple'):
+                    n_kwh_s = n_kwh_s + 1
         
-        if (s.type != 'unspecified'):
+        if (s.fee is not None or s.time is not None or s.kwh is not None):
             clean_supplier_prices.append(s)
 
     print('Results:')

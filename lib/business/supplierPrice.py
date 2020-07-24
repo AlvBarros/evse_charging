@@ -56,28 +56,30 @@ def checkIfKwh(json):
 
 class SupplierPrice:
     def __init__(self, json):
-
-        # This is kind of a factory approach to solving inheritance
-        self.type='unspecified'
-
         if (checkIfFee(json)):
-            FeePrice.__init__(self, json)
-        elif (checkIfTime(json)):
-            TimePrice.__init__(self, json)
-        elif (checkIfKwh(json)):
-            kWhPrice.__init__(self, json)
+            self.fee = FeePrice(json)
         else:
-            print(json)
-        # Should return as type 'unspecified' if nothing else
+            self.fee = None
 
-class FeePrice(SupplierPrice):
+        if (checkIfTime(json)):
+            self.time = TimePrice(json)
+        else:
+            self.time = None
+
+        if (checkIfKwh(json)):
+            self.kwh = kWhPrice(json)
+        else:
+            self.kwh = None
+
+        if (self.fee is None and self.time is None and self.kwh is None):
+            print(json)
+
+class FeePrice():
     def __init__(self, json):
-        self.type='fee'
         self.complexity = 'simple' # should not have any complexity
 
-class TimePrice(SupplierPrice):
+class TimePrice():
     def __init__(self, json):
-        self.type='time'
         if (
             'simple minute price' in json
             and 'has complex minute price' in json
@@ -96,9 +98,8 @@ class TimePrice(SupplierPrice):
         else: # should not be possible
             raise 'TimePrice must be either simple or complex. JSON: ' + str(json)
 
-class kWhPrice(SupplierPrice):
+class kWhPrice():
     def __init__(self, json):
-        self.type='kwh'
         if (
             'has kwh price' in json
             and 'kwh price' in json
