@@ -18,8 +18,7 @@ def run():
         clean_data = helper.evse_charging.cleanSupplierPricesData(data)
         calculated_result = helper.evse_charging.calculatePrices(clean_data)
         print('Validating result')
-        # print(calculated_result)
-        print('Does calculated_result has the same length as transactions?: ' + str(len(clean_data['transactions']) == len(calculated_result)))
+        print('KNOWN BUG: Does calculated_result has the same length as transactions?: ' + str(len(clean_data['transactions']) == len(calculated_result)))
         print('Test completed.')
     except:
         print('Test failed.')
