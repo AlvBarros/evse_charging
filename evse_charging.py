@@ -25,3 +25,4 @@ def importAndExportData():
     print('Files have been created:')
     for p in paths:
         print(p)
+    return paths
