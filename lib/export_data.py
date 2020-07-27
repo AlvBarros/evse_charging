@@ -10,9 +10,17 @@ def exportModels(objs):
     # Gets the current directory that the script is running
     current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
     # Gets the root directory of the project
-    current_dir = current_dir.split('\\evse_charging')[0]+'\\evse_charging'
-    # Adds /exports folder
-    exports_dir = current_dir + '\\exports'
+    if (current_dir.find('\\') > -1):
+        # Windows 
+        dir_separator = '\\'
+    elif (current_dir.find('/') > -1):
+        # MacOS
+        dir_separator = '/'
+    else:
+        raise 'No dir separator found'
+    current_dir = current_dir.split(f'{dir_separator}evse_charging')[0]+f'{dir_separator}evse_charging'
+    # Adds exports folder
+    exports_dir = current_dir + f'{dir_separator}exports'
     # Create folder if it does not exists
     if (not os.path.exists(exports_dir)):
         os.makedirs(exports_dir)
